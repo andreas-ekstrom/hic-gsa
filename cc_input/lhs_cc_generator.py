@@ -227,6 +227,11 @@ for pnt in range(npts):
     f.write('# Use pre calculated fock-matrix = yes/no\n')
     f.write('pre_calculated_fock_matrix = yes\n')
     f.write('\n')
+    f.write('\n')
+    f.write('# read in hf coeffs\n')
+    f.write('read_hf_transformation_file = yes\n')
+    f.write('\n')
+    
     f.write('# number of iterations for ccm ground-state\n')
     f.write('ccm_iter = 1000\n')
     f.write('\n')

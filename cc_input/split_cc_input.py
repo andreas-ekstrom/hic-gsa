@@ -93,6 +93,10 @@ for idx, par in enumerate(parameter_names):
     f.write('# Use pre calculated fock-matrix = yes/no\n')
     f.write('pre_calculated_fock_matrix = yes\n')
     f.write('\n')
+    f.write('# read in hf coeffs\n')
+    f.write('read_hf_transformation_file = yes\n')
+    f.write('\n')
+    
     f.write('# number of iterations for ccm ground-state\n')
     f.write('ccm_iter = 100\n')
     f.write('\n')
@@ -228,12 +232,14 @@ for idx,par in enumerate(parameter_names):
     f.write('NLO_LEC5 =  %.16f\n'%unit_matrix[C3S1_idx,idx])
     f.write('NLO_LEC6 =  %.16f\n'%unit_matrix[CE1_idx,idx])
     f.write('NLO_LEC7 =  %.16f\n'%unit_matrix[C3P2_idx,idx])
+ 
     f.write('\n')
     f.write('spcc_radius_file = eccentricity_20percent64_%s_nnlosat_mass_%d_N06E16_hw%d_OSC.dat\n'%(par,mass_nucleus,hbar_omega))
     f.write('spcc_hbar_file = hbar_20percent64_%s_nnlosat_mass_%d_N06E16_hw%d_OSC.dat\n'%(par,mass_nucleus,hbar_omega))
     f.write('spcc_norm_file = norm_20percent64_%s_nnlosat_mass_%d_N06E16_hw%d_OSC.dat\n'%(par,mass_nucleus,hbar_omega))
+    
     f.write('\n')
-    f.write('read_uhf_file = no \n')
+    f.write('number_spcc_vecs = 64\n')
     f.write('no2b_hdf5_file = no2b_208Pb_nnlo394_deltago_split_N10E22_hw%d.h5\n'%(hbar_omega))
     f.write('tl_file  = tl_ccsd.h5    \n')
     f.close()
