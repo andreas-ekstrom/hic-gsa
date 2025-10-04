@@ -1,0 +1,64 @@
+file_onebody_interaction1  = fock_nnlosat_c1_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction2  = fock_nnlosat_c1_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction3  = fock_nnlosat_c3_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction4  = fock_nnlosat_c4_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction5  = fock_nnlosat_Ct_3S1_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction6  = fock_nnlosat_Ct_1S0pp_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction7  = fock_nnlosat_Ct_1S0np_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction8  = fock_nnlosat_Ct_1S0nn_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction9  = fock_nnlosat_C_1S0_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction10 = fock_nnlosat_C_3P0_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction11 = fock_nnlosat_C_1P1_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction12 = fock_nnlosat_C_3P1_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction13 = fock_nnlosat_C_3S1_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction14 = fock_nnlosat_C_3S1-3D1_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction15 = fock_nnlosat_C_3P2_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction16 = fock_nnlosat_cD_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction17 = fock_nnlosat_cE_N06E16_hw18_O16_OSC.dat
+file_onebody_interaction18 = fock_nnlosat_const_N06E16_hw18_O16_OSC.dat
+
+
+file_twobody_interaction1  = vno2b_nnlosat_c1_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction2  = vno2b_nnlosat_c1_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction3  = vno2b_nnlosat_c3_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction4  = vno2b_nnlosat_c4_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction5  = vno2b_nnlosat_Ct_3S1_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction6  = vno2b_nnlosat_Ct_1S0pp_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction7  = vno2b_nnlosat_Ct_1S0np_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction8  = vno2b_nnlosat_Ct_1S0nn_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction9  = vno2b_nnlosat_C_1S0_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction10 = vno2b_nnlosat_C_3P0_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction11 = vno2b_nnlosat_C_1P1_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction12 = vno2b_nnlosat_C_3P1_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction13 = vno2b_nnlosat_C_3S1_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction14 = vno2b_nnlosat_C_3S1-3D1_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction15 = vno2b_nnlosat_C_3P2_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction16 = vno2b_nnlosat_cD_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction17 = vno2b_nnlosat_cE_N06E16_hw18_O16_OSC.h5
+file_twobody_interaction18 = vno2b_nnlosat_const_N06E16_hw18_O16_OSC.h5
+     
+cD =      2.1343466419965895
+cE =      0.9347078000117706
+c1 =      -1.1099128583404927
+c2 =      0.0 
+c3 =      -3.5553315051666692
+c4 =      3.7149243881354073
+LO_LEC1 =   -0.1808262598787120
+LO_LEC2 =   -0.1665441234756459
+LO_LEC3 =   -0.1671944578978737
+LO_LEC4 =   -0.1665096977462381
+NLO_LEC1 =  2.9717738183025482
+NLO_LEC2 =  1.3398945087539020
+NLO_LEC3 =  0.4950557984212747
+NLO_LEC4 =  -1.0590954513352633
+NLO_LEC5 =  0.8963789129485016
+NLO_LEC6 =  0.6744654719241235
+NLO_LEC7 =  -0.7957148638540052
+
+spcc_radius_file = radius_const_spcc.dat
+spcc_hbar_file = hbar_const_spcc.dat
+spcc_norm_file = norm_spcc.dat
+
+read_uhf_file = no
+no2b_hdf5_file = no2b_208Pb_nnlo394_deltago_split_HF_N10E22_hw12.h5
+tl_file  = tl_ccsd_10percent_sc96_200_nnlosat_O16_N06E16_hw18.h5

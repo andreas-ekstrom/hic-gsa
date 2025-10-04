@@ -18,9 +18,9 @@ np.random.seed(666)
 #############################################################################################
 
 # select the number of sample points
-npts = 64
+npts = 200
 
-percent_domain = 10
+percent_domain = 20
 
 # cc input
 twobody_nmax = 6 
