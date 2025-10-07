@@ -41,22 +41,7 @@ print(f'eccentricity = {obs}')
 print(f'energy       = {spectrum[0]}')
 
 
-# a function to read some xval-points            
-#def read_list_of_points(filename, skip_first = True):    
-#    points = []
-#    with open(filename,'r') as f:
-#        if skip_first:
-#            next(f)
-#        for line in f:
-#            myarray = np.fromstring(line, dtype=float, sep=' ')
-#            points.append(myarray)
-#    return np.array(points)
-#
-
-
-
-
-# C3S1 C3P2 C1S0 Ct1S0pp Ct1S0nn C3P0 C3P1 Ct1S0np cE CE1 Ct3S1 c3 c1 cD C1P1 c4
+# ordering in xval file: C3S1 C3P2 C1S0 Ct1S0pp Ct1S0nn C3P0 C3P1 Ct1S0np cE CE1 Ct3S1 c3 c1 cD C1P1 c4
 xval_lec_values = './../cc_input/cc_lhs_input_NNLOsat_mass_16_hw_18_NO_ISOBREAK_20_percent_200_points/list_of_points_NNLOsat_mass_16_hw_18_NO_ISOBREAK_20percent_200_points.txt'
 xval_points, names_used = aux.read_list_of_points(xval_lec_values, order_parameters=parameters, return_names=True)
 print("Columns returned (in order):", names_used)

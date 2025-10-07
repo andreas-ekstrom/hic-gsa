@@ -198,10 +198,9 @@ class emulator:
             
         # solve generalized eigenvalue problem
 
-        eigvals, eigvec_L, eigvec_O = spla.eig(sum_mtx,norm_mtx, left=True, right=True)
+        eigvals, eigvec_L, eigvec_R = spla.eig(sum_mtx,norm_mtx, left=True, right=True)
         # sort wrt real part (and if tied: wrt imaginary part)
         s = np.argsort(eigvals)
-
         spectrum = eigvals[s]
 
         if target is not None:
@@ -221,9 +220,8 @@ class emulator:
                 if drop_states is not None:
                     obs_mtx = self.drop_states_from_matrix(obs_mtx,drop_states)
 
-                obs_val = self.expectation_value(eigvec_O[:,s[level]], obs_mtx, eigvec_O[:,s[level]], norm_mtx)
+                obs_val = self.expectation_value(eigvec_R[:,s[level]], obs_mtx, eigvec_R[:,s[level]], norm_mtx)
                 obs_vals.append(obs_val)
-                #eig_val= self.expectation_value(eigvec_O[:,s[level]], sum_mtx, eigvec_O[:,s[level]], norm_mtx)
 
         observables = []
         for obs in obs_vals:
@@ -237,7 +235,7 @@ class emulator:
         else:
             energy_eigenvalue = eigvals[s[level]]
 
-        return observables, eigvec_O[:,s[level]], spectrum
+        return observables, eigvec_R[:,s[level]], spectrum
     
     def batch_evaluate(self, domain_points, progress=False, use_best_sample=False, select_level=0, drop_states=None):
         """
@@ -590,7 +588,7 @@ class SmallBatchVoting:
             small_batch_norm_mtx = self.drop_states_from_matrix(self.subspace_norm_mtx, drop_states)
             small_batch_H_mtx = self.drop_states_from_matrix(self.subspace_H_mtx, drop_states)
             # solve generalized eigenvalue problem
-            eigvals, eigvec_L, eigvec_O = spla.eig(small_batch_H_mtx, \
+            eigvals, eigvec_L, eigvec_R = spla.eig(small_batch_H_mtx, \
                                             small_batch_norm_mtx, left=True, right=True)
             # sort wrt real part (and if tied: wrt imaginary part)
             s = np.argsort(eigvals)
