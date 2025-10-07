@@ -148,11 +148,12 @@ class emulator:
 
     
     def expectation_value(self, bra, op, ket, N):
+
         if N is not None:
-            norm = np.dot(np.dot(bra.transpose(),N),ket)
+            norm = bra.transpose()@N@ket
         else:
-            norm = np.dot(bra.transpose(),ket)
-        return np.dot(np.dot(bra.transpose(), op), ket)/norm
+            norm = bra.transpose()@ket
+        return (bra.transpose()@op@ket)/norm
 
     
     def sample_select(self, domain_point):
