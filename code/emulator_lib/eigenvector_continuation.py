@@ -148,11 +148,12 @@ class emulator:
 
     
     def expectation_value(self, bra, op, ket, N):
-
+       
         if N is not None:
             norm = bra.transpose()@N@ket
         else:
             norm = bra.transpose()@ket
+
         return (bra.transpose()@op@ket)/norm
 
     
@@ -202,8 +203,10 @@ class emulator:
         eigvals, eigvec_L, eigvec_R = spla.eig(sum_mtx,norm_mtx, left=True, right=True)
         # sort wrt real part (and if tied: wrt imaginary part)
         s = np.argsort(eigvals)
+        
         spectrum = eigvals[s]
-
+      
+        
         if target is not None:
             state, spcc_value, states  = find_nearest(spectrum, target)
             #if len(states) > 1:
@@ -217,10 +220,10 @@ class emulator:
 
             for subspace_obs in self.subspace_observable:
                 obs_mtx = subspace_obs[2]
-
+                
                 if drop_states is not None:
                     obs_mtx = self.drop_states_from_matrix(obs_mtx,drop_states)
-
+                    
                 obs_val = self.expectation_value(eigvec_R[:,s[level]], obs_mtx, eigvec_R[:,s[level]], norm_mtx)
                 obs_vals.append(obs_val)
 

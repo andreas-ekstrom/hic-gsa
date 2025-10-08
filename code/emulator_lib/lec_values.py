@@ -1,4 +1,5 @@
 import collections
+import numpy as np
 
 NNLOopt_LECs = collections.OrderedDict()
 NNLOopt_LECs = {'c1':-0.91863953,
@@ -81,3 +82,54 @@ Delta_NNLOgo_394_parameters_names = list(Delta_NNLOgo_394_LECs.keys())
 NNLOsat_parameter_names = list(NNLOsat_LECs.keys())
 SingleLEC_parameter_name = list(Single_LEC.keys())
 
+def setup_parameter_domain(
+    LECvalues,
+    mode="percentage",            # ready for future modes
+    scale_factor=0.1,
+    factor_overrides=None,        # e.g. {'cE':1.0,'cD':1.0,'C1S0':1.0,'CtLO':1.0}
+):
+    """
+    Build parameter bounds according to `mode`.
+
+    Current modes:
+      - 'percentage': symmetric box around each LEC: val ± (scale_factor * |val|)
+                      with optional per-LEC multiplicative overrides.
+
+    Returns
+    -------
+    mid_point : np.ndarray
+    lim_lo    : np.ndarray
+    lim_hi    : np.ndarray
+    """
+    if factor_overrides is None:
+        factor_overrides = {'cE':1.0, 'cD':1.0, 'C1S0':1.0, 'CtLO':1.0}
+
+    if mode == "percentage":
+        return _build_percentage_box(LECvalues, scale_factor, factor_overrides)
+    else:
+        raise NotImplementedError(f"mode='{mode}' not implemented yet.")
+
+
+def _build_percentage_box(LECvalues, scale_factor, factor_overrides):
+    """val ± (fraction * |val|), with optional per-LEC overrides (no double-counting)."""
+    import numpy as np
+    ctlo_set = {'Ct1S0pp','Ct1S0nn','Ct1S0np','Ct3S1'}
+
+    lim_lo, lim_hi = [], []
+
+    for lec, val in LECvalues.items():
+        frac = scale_factor
+        # per-LEC factor (e.g., 'cE', 'cD', 'C1S0')
+        frac *= factor_overrides.get(lec, 1.0)
+        # group factor for the CtLO family
+        if lec in ctlo_set:
+            frac *= factor_overrides.get('CtLO', 1.0)
+
+        lim = frac * abs(val)
+        lim_lo.append(val - lim)
+        lim_hi.append(val + lim)
+
+    lim_lo = np.array(lim_lo, dtype=float)
+    lim_hi = np.array(lim_hi, dtype=float)
+    mid_point = (lim_lo + lim_hi) / 2.0
+    return mid_point, lim_lo, lim_hi
