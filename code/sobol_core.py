@@ -9,12 +9,16 @@ import matplotlib.pyplot as plt
 import math as math
 
 def sensitivity_analysis(problem, X_values, Y_values, print_correlations=False):
+
+    problem.set_results(np.array(Y_values))
+    problem.analyze_sobol(num_resamples=100, calc_second_order=True, print_to_console=True)  
+
+    Si = problem.analysis
     
-    Si_values = sobol.analyze(problem, np.array(Y_values),print_to_console=True, num_resamples=100)
-    Si_mean, Si_ci = Si_values['S1'], Si_values['S1_conf']
-    St_mean, St_ci = Si_values['ST'], Si_values['ST_conf']
+    S1_mean, S1_ci = Si['S1'], Si['S1_conf']
+    ST_mean, ST_ci = Si['ST'], Si['ST_conf']
     
-    return np.array(Si_mean), np.array(Si_ci), np.array(St_mean), np.array(St_ci)
+    return np.array(S1_mean), np.array(S1_ci), np.array(ST_mean), np.array(ST_ci)
 
 def sensitivity_analysis_plot_multi(
     problem,

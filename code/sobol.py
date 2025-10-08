@@ -90,29 +90,28 @@ from tqdm import tqdm
 
 print(f'SOBOL analsysis')
 
-Nexp=9
-Nsamples = 2**Nexp
-
 bounds_list = []
 for i in range(0,domain_dim):
     bounds_list.append([lim_lo[i],lim_hi[i]])
     
-problem = {
+problem_definition = {
     'num_vars': domain_dim,
     'names': parameters_wo_const,
     'bounds': bounds_list,
     'dists' : ['unif']*domain_dim}
 
-# Quasi-MC sample design
-print(f'generating {Nsamples} sample points')
-design = sobol_design
-options = {
-    "calc_second_order":True,
-    "scramble":True}   # improves statistical properties (important for estimating confidence intervals).
+# Initialize ProblemSpec
+problem = ProblemSpec(problem_definition)
 
-#print(design)
-sample_points = design.sample(problem, Nsamples,**options)
+# Quasi-MC sample design
+Nexp=6
+Nsamples = 2**Nexp #base samples (expanded internally via Saltelli algo)
+print(f'generating {Nsamples} sample points')
+problem.sample_sobol(Nsamples, calc_second_order=True,scramble=True)
+# scramble improves statistical properties (important for estimating confidence intervals).
+
 #2*(domain_dimension+1)*Nsamples
+sample_points = problem.samples
 Nsamples = len(sample_points)
 print(f'Total sample size = {Nsamples}')
 
@@ -128,7 +127,7 @@ Y_eccentricity_values = []
 
 #analyze the samples and plot the results
 parameters_label = [r'$c_1$',r'$c_3$',r'$c_4$',r'$\tilde{C}^{(np)}_{1S0}$',r'$\tilde{C}^{(nn)}_{1S0}$',r'$\tilde{C}^{(pp)}_{1S0}$',r'$\tilde{C}_{3S1}$',r'$C_{1S0}$',r'$C_{3P0}$',r'$C_{1P1}$',r'$C_{3P1}$',r'$C_{3S1}$',r'$C_{E1}$',r'$C_{3P2}$',r'$c_D$',r'$c_E$']
-load_data = False 
+load_data = True 
 
 file_name = f'sobol_data_Nexp_{str(Nexp)}_{mode}_scalefactor_{scale_factor}'
 
@@ -172,19 +171,14 @@ else:
     json.dump( file_data, open(file_name+".json", 'w' ) )
     print(f'done')
 
-sample_points = np.array(sample_points)
+
 #analyze the samples and print the results
-#Si_mean, Si_ci, St_mean, St_ci = sobol_core.sensitivity_analysis(problem, None, Y_energy_values, print_correlations=False)
-#Si_mean, Si_ci, St_mean, St_ci = sobol_core.sensitivity_analysis(problem, None, Y_eccentricity_values, print_correlations=False)
-
-
-#fig_sensitivity = sobol_core.sensitivity_analysis_plot(problem, np.array(sample_points), Y_E0_values, Y_Ex2_values, Y_Ex4_values, Y_R42_values,
-#                                                       xlist_label=parameters_label,hist_ranges=[[-350,50],[0.0,5.0],[0.0,6],[0.0,8.0]])
-
+#S1_mean, S1_ci, ST_mean, ST_ci = sobol_core.sensitivity_analysis(problem, None, Y_energy_values, print_correlations=False)
+#S1_mean, S1_ci, ST_mean, ST_ci = sobol_core.sensitivity_analysis(problem, None, Y_eccentricity_values, print_correlations=False)
 
 parameters_label = [r'$c_1$',r'$c_3$',r'$c_4$',r'$\tilde{C}^{(np)}_{1S0}$',r'$\tilde{C}^{(nn)}_{1S0}$',r'$\tilde{C}^{(pp)}_{1S0}$',r'$\tilde{C}_{3S1}$',r'$C_{1S0}$',r'$C_{3P0}$',r'$C_{1P1}$',r'$C_{3P1}$',r'$C_{3S1}$',r'$C_{E1}$',r'$C_{3P2}$',r'$c_D$',r'$c_E$']
 
-
+sample_points = np.array(sample_points)
 fig_sensitivity = sobol_core.sensitivity_analysis_plot_multi(problem,
                                                              X_values = np.array(sample_points),
                                                              Y_values_list = [Y_energy_values, Y_eccentricity_values],    # list of length Ny, each an array-like of model outputs
