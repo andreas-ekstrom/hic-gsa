@@ -88,7 +88,7 @@ for i in range(0,domain_dim):
 
 from tqdm import tqdm
 
-print(f'Sobol analsysis')
+print(f'SOBOL analsysis')
 
 Nexp=9
 Nsamples = 2**Nexp
@@ -96,16 +96,14 @@ Nsamples = 2**Nexp
 bounds_list = []
 for i in range(0,domain_dim):
     bounds_list.append([lim_lo[i],lim_hi[i]])
-
-dist_type = ['unif']*domain_dim
     
 problem = {
     'num_vars': domain_dim,
     'names': parameters_wo_const,
     'bounds': bounds_list,
-    'dists' : dist_type}
+    'dists' : ['unif']*domain_dim}
 
-# QMC sample design
+# Quasi-MC sample design
 print(f'generating {Nsamples} sample points')
 design = sobol_design
 options = {
@@ -130,7 +128,7 @@ Y_eccentricity_values = []
 
 #analyze the samples and plot the results
 parameters_label = [r'$c_1$',r'$c_3$',r'$c_4$',r'$\tilde{C}^{(np)}_{1S0}$',r'$\tilde{C}^{(nn)}_{1S0}$',r'$\tilde{C}^{(pp)}_{1S0}$',r'$\tilde{C}_{3S1}$',r'$C_{1S0}$',r'$C_{3P0}$',r'$C_{1P1}$',r'$C_{3P1}$',r'$C_{3S1}$',r'$C_{E1}$',r'$C_{3P2}$',r'$c_D$',r'$c_E$']
-load_data = True 
+load_data = False 
 
 file_name = f'sobol_data_Nexp_{str(Nexp)}_{mode}_scalefactor_{scale_factor}'
 
