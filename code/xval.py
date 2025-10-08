@@ -13,7 +13,7 @@ LECvalues = lecs.NNLOsat_LECs
 path = './../cc_output/spcc64_o16_nnlosat_emax6_hw18/spcc_matrices/'
 file_base_H = 'hbar_20percent64_%s_nnlosat_mass_16_N06E16_hw16_OSC.dat'
 file_norm = 'norm_20percent64_cE_nnlosat_mass_16_N06E16_hw16_OSC.dat'
-files_obs = ['eccentricity_20percent64_c1_nnlosat_mass_16_N06E16_hw16_OSC.dat']
+files_obs = ['radius_const_spcc.dat']
 names_obs = ['E']
 
 subspace_dim = 64

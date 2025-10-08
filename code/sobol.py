@@ -104,7 +104,7 @@ problem_definition = {
 problem = ProblemSpec(problem_definition)
 
 # Quasi-MC sample design
-Nexp=6
+Nexp=13
 Nsamples = 2**Nexp #base samples (expanded internally via Saltelli algo)
 print(f'generating {Nsamples} sample points')
 problem.sample_sobol(Nsamples, calc_second_order=True,scramble=True)
@@ -173,14 +173,26 @@ else:
 
 
 #analyze the samples and print the results
-#S1_mean, S1_ci, ST_mean, ST_ci = sobol_core.sensitivity_analysis(problem, None, Y_energy_values, print_correlations=False)
-#S1_mean, S1_ci, ST_mean, ST_ci = sobol_core.sensitivity_analysis(problem, None, Y_eccentricity_values, print_correlations=False)
+S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_energy_values, print_correlations=False)
+#S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_eccentricity_values, print_correlations=False)
 
 parameters_label = [r'$c_1$',r'$c_3$',r'$c_4$',r'$\tilde{C}^{(np)}_{1S0}$',r'$\tilde{C}^{(nn)}_{1S0}$',r'$\tilde{C}^{(pp)}_{1S0}$',r'$\tilde{C}_{3S1}$',r'$C_{1S0}$',r'$C_{3P0}$',r'$C_{1P1}$',r'$C_{3P1}$',r'$C_{3S1}$',r'$C_{E1}$',r'$C_{3P2}$',r'$c_D$',r'$c_E$']
 
-sample_points = np.array(sample_points)
+fig_heatmap = sobol_core.sensitivity_analysis_plot_second_order_heatmap(problem=problem,               # your ProblemSpec with samples set
+                                                                        Y_values=Y_eccentricity_values,      # the output you want analyzed/visualized
+                                                                        xlist_label=parameters_wo_const,
+                                                                        thresh=0.001,
+                                                                        triangle="upper",
+                                                                        annotate=False,
+)
+
+fig_heatmap.tight_layout()
+fig_heatmap.savefig('heatmap_plot.pdf',bbox_inches = 'tight', pad_inches = 0)
+plt.show()
+
+
+
 fig_sensitivity = sobol_core.sensitivity_analysis_plot_multi(problem,
-                                                             X_values = np.array(sample_points),
                                                              Y_values_list = [Y_energy_values, Y_eccentricity_values],    # list of length Ny, each an array-like of model outputs
                                                              xlist_label = parameters_label,                              # list of parameter labels (LaTeX ok)
                                                              hist_ranges=None,                                            # list of (lo, hi) ranges per Y; or None for auto
@@ -189,7 +201,7 @@ fig_sensitivity = sobol_core.sensitivity_analysis_plot_multi(problem,
                                                              capsize=2,                                                   # error bar cap size
                                                              )
 
-plt.tight_layout()
+fig_sensitivity.tight_layout()
 plt.savefig('hm_plot.pdf',bbox_inches = 'tight', pad_inches = 0)
 plt.show()
 
