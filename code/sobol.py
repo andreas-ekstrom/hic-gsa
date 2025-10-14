@@ -22,7 +22,7 @@ LECvalues = lecs.NNLOsat_LECs
 path = './../cc_output/spcc64_o16_nnlosat_emax6_hw18/spcc_matrices/'
 file_base_H = 'hbar_20percent64_%s_nnlosat_mass_16_N06E16_hw16_OSC.dat'
 file_norm = 'norm_20percent64_cE_nnlosat_mass_16_N06E16_hw16_OSC.dat'
-files_obs = ['eccentricity_20percent64_c1_nnlosat_mass_16_N06E16_hw16_OSC.dat']
+files_obs = ['eccentricity_spcc.dat']
 names_obs = ['E']
 
 subspace_dim = 64
@@ -104,7 +104,7 @@ problem_definition = {
 problem = ProblemSpec(problem_definition)
 
 # Quasi-MC sample design
-Nexp=13
+Nexp=12
 Nsamples = 2**Nexp #base samples (expanded internally via Saltelli algo)
 print(f'generating {Nsamples} sample points')
 problem.sample_sobol(Nsamples, calc_second_order=True,scramble=True)
@@ -172,6 +172,14 @@ else:
     print(f'done')
 
 
+#plt.scatter(Y_energy_values,Y_eccentricity_values,color='black',alpha=0.05)
+#plt.xlabel('energy',fontsize=15)
+#plt.ylabel('eccentricity',fontsize=15)
+#plt.savefig('energy_vs_eccentricity.pdf')
+#plt.show()
+#
+#sys.exit(-1)
+    
 #analyze the samples and print the results
 S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_energy_values, print_correlations=False)
 #S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_eccentricity_values, print_correlations=False)

@@ -13,7 +13,7 @@ LECvalues = lecs.NNLOsat_LECs
 path = './../cc_output/spcc64_o16_nnlosat_emax6_hw18/spcc_matrices/'
 file_base_H = 'hbar_20percent64_%s_nnlosat_mass_16_N06E16_hw16_OSC.dat'
 file_norm = 'norm_20percent64_cE_nnlosat_mass_16_N06E16_hw16_OSC.dat'
-files_obs = ['radius_const_spcc.dat']
+files_obs = ['eccentricity_spcc.dat']
 names_obs = ['E']
 
 subspace_dim = 64
@@ -64,6 +64,13 @@ print(f'found {xval_points.shape[0]} LEC values and {cc_vals_energy.shape[0]} CC
 spcc_vals_energy = []
 spcc_vals_eccentricity = []
 
+cc_vals_energy_cut = []
+spcc_vals_energy_cut = []
+
+cc_vals_eccentricity_cut = []
+spcc_vals_eccentricity_cut = []
+
+
 for idx, LECvalue in enumerate(xval_points):
 
     print(idx)
@@ -71,13 +78,16 @@ for idx, LECvalue in enumerate(xval_points):
 
     print(f' SPCC energy = {spectrum[0].real} | SPCC eccentricity = {obs[0]}')
     print(f'   CC energy = {cc_vals_energy[idx]} |   CC eccentricity = {cc_vals_eccentricity[idx]}')
-    spcc_vals_eccentricity.append(obs[0])
-    spcc_vals_energy.append(spectrum[0].real)
+    if (spectrum[0].real > -160 and spectrum[0].real < -80):
+        spcc_vals_eccentricity_cut.append(obs[0])
+        cc_vals_eccentricity_cut.append(cc_vals_eccentricity[idx])
+        spcc_vals_energy_cut.append(spectrum[0].real)
+        cc_vals_energy_cut.append(cc_vals_energy[idx])
 
 
 # --- ENERGY PLOT ---
 fig, ax = plt.subplots(figsize=(8, 8))
-ax.scatter(cc_vals_energy, spcc_vals_energy, s=30, alpha=0.8)
+ax.scatter(cc_vals_energy_cut, spcc_vals_energy_cut, s=30, alpha=0.8)
 xy = np.linspace(*ax.get_xlim())
 ax.plot(xy, xy, color='k', lw=1)
 ax.set_xlabel('Exact')
@@ -90,7 +100,7 @@ plt.show()
 
 # --- ECCENTRICITY PLOT ---
 fig, ax = plt.subplots(figsize=(8, 8))
-ax.scatter(cc_vals_eccentricity, spcc_vals_eccentricity, s=30, alpha=0.8)
+ax.scatter(cc_vals_eccentricity_cut, spcc_vals_eccentricity_cut, s=30, alpha=0.8)
 xy = np.linspace(*ax.get_xlim())
 ax.plot(xy, xy, color='k', lw=1)
 ax.set_xlabel('Exact')
