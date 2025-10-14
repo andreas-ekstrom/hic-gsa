@@ -22,8 +22,8 @@ LECvalues = lecs.NNLOsat_LECs
 path = './../cc_output/spcc64_o16_nnlosat_emax6_hw18/spcc_matrices/'
 file_base_H = 'hbar_20percent64_%s_nnlosat_mass_16_N06E16_hw16_OSC.dat'
 file_norm = 'norm_20percent64_cE_nnlosat_mass_16_N06E16_hw16_OSC.dat'
-files_obs = ['eccentricity_spcc.dat']
-names_obs = ['E']
+files_obs = ['eccentricity_spcc.dat','r2.dat']
+names_obs = ['E','R2']
 
 subspace_dim = 64
 domain_dim = 16
@@ -44,7 +44,8 @@ for idx, par in enumerate(parameters):
 print(f'test_point = {test_point}')
 obs, eigvec_O, spectrum = em.evaluate(test_point,level=0)
 
-print(f'eccentricity = {obs}')
+print(f'eccentricity = {obs[0]}')
+print(f'R^2          = {obs[1]}')
 print(f'energy       = {spectrum[0]}')
 
 #############################
@@ -104,7 +105,7 @@ problem_definition = {
 problem = ProblemSpec(problem_definition)
 
 # Quasi-MC sample design
-Nexp=12
+Nexp=14
 Nsamples = 2**Nexp #base samples (expanded internally via Saltelli algo)
 print(f'generating {Nsamples} sample points')
 problem.sample_sobol(Nsamples, calc_second_order=True,scramble=True)
@@ -124,10 +125,12 @@ print(f'Total sample size = {Nsamples}')
 
 Y_energy_values = []
 Y_eccentricity_values = []
+Y_R2_values = []
+Y_quadrupole_corr_values = []
 
 #analyze the samples and plot the results
 parameters_label = [r'$c_1$',r'$c_3$',r'$c_4$',r'$\tilde{C}^{(np)}_{1S0}$',r'$\tilde{C}^{(nn)}_{1S0}$',r'$\tilde{C}^{(pp)}_{1S0}$',r'$\tilde{C}_{3S1}$',r'$C_{1S0}$',r'$C_{3P0}$',r'$C_{1P1}$',r'$C_{3P1}$',r'$C_{3S1}$',r'$C_{E1}$',r'$C_{3P2}$',r'$c_D$',r'$c_E$']
-load_data = True 
+load_data = False 
 
 file_name = f'sobol_data_Nexp_{str(Nexp)}_{mode}_scalefactor_{scale_factor}'
 
@@ -140,7 +143,9 @@ if load_data:
     parameters_label = file_data['parameters_label'] = parameters_label
     sample_points = file_data['sample_points']
     Y_energy_values  = file_data['Y_energy_values']  
-    Y_eccentricity_values  = file_data['Y_eccentricity_values']  
+    Y_eccentricity_values  = file_data['Y_eccentricity_values']
+    Y_R2_values = file_data['Y_R2_values']
+    Y_quadrupole_corr_values = file_data['Y_quadrupole_corr_values']
 else:
     exists = os.path.isfile('./'+file_name+'.json')
     if exists:
@@ -155,6 +160,10 @@ else:
 
         Y_energy_values.append(spectrum[0].real)
         Y_eccentricity_values.append(obs[0])
+        Y_R2_values.append(obs[1])
+        R2_perp = obs[1]*2/3
+        Q = 2*np.pi*obs[0]/(3*R2_perp**2)
+        Y_quadrupole_corr_values.append(Q)
 
     file_data = {}
     
@@ -165,7 +174,9 @@ else:
     file_data['sample_points'] = sample_points.tolist()
     file_data['Y_energy_values'] = Y_energy_values
     file_data['Y_eccentricity_values'] = Y_eccentricity_values
- 
+    file_data['Y_R2_values'] = Y_R2_values
+    file_data['Y_quadrupole_corr_values'] = Y_quadrupole_corr_values
+    
     
     print('saving :%s'%file_name)
     json.dump( file_data, open(file_name+".json", 'w' ) )
@@ -181,8 +192,11 @@ else:
 #sys.exit(-1)
     
 #analyze the samples and print the results
-S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_energy_values, print_correlations=False)
+#S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_energy_values, print_correlations=False)
 #S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_eccentricity_values, print_correlations=False)
+#S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_R2_values, print_correlations=False)
+#S1_mean, S1_ci, ST_mean, ST_ci, analyzed = sobol_core.sensitivity_analysis(problem, Y_quadrupole_corr_values, print_correlations=False)
+
 
 parameters_label = [r'$c_1$',r'$c_3$',r'$c_4$',r'$\tilde{C}^{(np)}_{1S0}$',r'$\tilde{C}^{(nn)}_{1S0}$',r'$\tilde{C}^{(pp)}_{1S0}$',r'$\tilde{C}_{3S1}$',r'$C_{1S0}$',r'$C_{3P0}$',r'$C_{1P1}$',r'$C_{3P1}$',r'$C_{3S1}$',r'$C_{E1}$',r'$C_{3P2}$',r'$c_D$',r'$c_E$']
 
@@ -201,10 +215,16 @@ plt.show()
 
 
 fig_sensitivity = sobol_core.sensitivity_analysis_plot_multi(problem,
-                                                             Y_values_list = [Y_energy_values, Y_eccentricity_values],    # list of length Ny, each an array-like of model outputs
+                                                            Y_values_list = [Y_energy_values,                             # list of length Ny, each an array-like of model outputs
+                                                                             Y_eccentricity_values,
+                                                                             Y_R2_values,
+                                                                             Y_quadrupole_corr_values],    
                                                              xlist_label = parameters_label,                              # list of parameter labels (LaTeX ok)
-                                                             hist_ranges=None,                                            # list of (lo, hi) ranges per Y; or None for auto
-                                                             y_labels= [r'$E$',r'$\epsilon$'],                            # list of legend / histogram xlabels (e.g., [r'$E(0^+)$', ...])
+                                                             hist_ranges=None,                                            # list of (lo, hi) ranges per Y; or None for auto 
+                                                             y_labels= [r'$E$',                                           # list of legend / histogram xlabels (e.g., [r'$E(0^+)$', ...])
+                                                                        r'$\epsilon$',
+                                                                        r'$R^2$',
+                                                                        r'$B^2_2$'],        
                                                              width=None,                                                  # bar width; if None, chosen based on Ny
                                                              capsize=2,                                                   # error bar cap size
                                                              )
