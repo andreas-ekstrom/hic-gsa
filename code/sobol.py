@@ -130,7 +130,7 @@ Y_quadrupole_corr_values = []
 
 #analyze the samples and plot the results
 parameters_label = [r'$c_1$',r'$c_3$',r'$c_4$',r'$\tilde{C}^{(np)}_{1S0}$',r'$\tilde{C}^{(nn)}_{1S0}$',r'$\tilde{C}^{(pp)}_{1S0}$',r'$\tilde{C}_{3S1}$',r'$C_{1S0}$',r'$C_{3P0}$',r'$C_{1P1}$',r'$C_{3P1}$',r'$C_{3S1}$',r'$C_{E1}$',r'$C_{3P2}$',r'$c_D$',r'$c_E$']
-load_data = False 
+load_data = True 
 
 file_name = f'sobol_data_Nexp_{str(Nexp)}_{mode}_scalefactor_{scale_factor}'
 
@@ -201,7 +201,7 @@ else:
 parameters_label = [r'$c_1$',r'$c_3$',r'$c_4$',r'$\tilde{C}^{(np)}_{1S0}$',r'$\tilde{C}^{(nn)}_{1S0}$',r'$\tilde{C}^{(pp)}_{1S0}$',r'$\tilde{C}_{3S1}$',r'$C_{1S0}$',r'$C_{3P0}$',r'$C_{1P1}$',r'$C_{3P1}$',r'$C_{3S1}$',r'$C_{E1}$',r'$C_{3P2}$',r'$c_D$',r'$c_E$']
 
 fig_heatmap = sobol_core.sensitivity_analysis_plot_second_order_heatmap(problem=problem,               # your ProblemSpec with samples set
-                                                                        Y_values=Y_eccentricity_values,      # the output you want analyzed/visualized
+                                                                        Y_values=Y_quadrupole_corr_values,      # the output you want analyzed/visualized
                                                                         xlist_label=parameters_wo_const,
                                                                         thresh=0.001,
                                                                         triangle="upper",
@@ -226,7 +226,7 @@ fig_sensitivity = sobol_core.sensitivity_analysis_plot_multi(problem,
                                                                         r'$R^2$',
                                                                         r'$B^2_2$'],        
                                                              width=None,                                                  # bar width; if None, chosen based on Ny
-                                                             capsize=2,                                                   # error bar cap size
+                                                             capsize=0,                                                   # error bar cap size
                                                              )
 
 fig_sensitivity.tight_layout()
